@@ -28,7 +28,6 @@ import org.htmlparser.util.ParserException;
  */
 
 /**
- * @author 欧阳丰
  * 
  */
 public class Maiziedu {

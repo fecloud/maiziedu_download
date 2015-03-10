@@ -1,8 +1,6 @@
 /**
  * EduBean.java
  * 2015-3-10
- * 深圳市五月高球信息咨询有限公司
- * 欧阳丰
  */
 package com.yuncore.maiziedu;
 
