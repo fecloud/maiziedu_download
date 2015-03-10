@@ -170,8 +170,8 @@ public class Maiziedu {
 			while (-1 != (len = inputStream.read(bs))) {
 				out.write(bs, 0, len);
 				count += len;
-				System.out.println(String.format("[ downloadVideo length:%s ]",
-						count));
+				System.out.println(String.format("[ downloadVideo length: %s/%s ]",
+						count,contentlength));
 			}
 			out.flush();
 			out.close();
