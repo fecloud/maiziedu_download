@@ -111,7 +111,7 @@ public class Maiziedu {
 
 	public static String getVideo(String address) throws IOException {
 		final String str = getHtml(address);
-		Pattern pattern = Pattern.compile("http://\\w*.maiziedu.com/\\w*.mp4");
+		Pattern pattern = Pattern.compile("http://(\\w|\\.)*.maiziedu.com/(\\w|\\.)*.mp4");
 		Matcher matcher = pattern.matcher(str);
 		if (matcher.find())
 			return matcher.group();
