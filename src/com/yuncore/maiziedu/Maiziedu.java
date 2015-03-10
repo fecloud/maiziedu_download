@@ -46,7 +46,14 @@ public class Maiziedu {
 				final String videoUrl = getVideo("http://www.maiziedu.com"
 						+ str.getUrl());
 				if (null != videoUrl) {
-					downloadVideo(videoUrl, args[1], str.getName() + ".mp4");
+					while(true){
+						try{
+							downloadVideo(videoUrl, args[1], str.getName() + ".mp4");
+							break;
+						}catch (Exception e) {
+							System.out.println(String.format("[ downloadVideo %s error", videoUrl));
+						}
+					}
 				}
 			}
 		}
