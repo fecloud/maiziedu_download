@@ -1,0 +1,6 @@
+#!/bin/sh
+PROG=maiziedu_download
+PROG_PATH="/data/app/$PROG"
+ROG_PATH_JAR="$PROG_PATH/maiziedu_download-run.jar"
+
+java -jar $ROG_PATH_JAR $*

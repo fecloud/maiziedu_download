@@ -1,0 +1,24 @@
+#!/bin/sh
+
+PROG=maiziedu_download
+PROG_PATH="/data/app/$PROG"
+ROG_EXE="maiziedu_download"
+ROG_PATH_EXE="$PROG_PATH/$ROG_EXE"
+MSG_PREFIX=" *"
+
+echo "$MSG_PREFIX start install $PROG"
+
+if [ -d "$PROG_PATH" ] ; then
+	rm -rf $PROG_PATH
+fi
+
+mkdir -p $PROG_PATH
+
+cp  -v -n ./build/maiziedu_download-run.jar $PROG_PATH/
+cp  -v -n ./$ROG_EXE $PROG_PATH/
+
+if [ -f "/usr/bin/$ROG_EXE" ] ; then
+	ln -f -s $ROG_PATH_EXE /usr/bin/$ROG_EXE
+fi
+
+echo "$MSG_PREFIX install sucess $PROG"
