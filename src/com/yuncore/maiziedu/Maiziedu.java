@@ -164,7 +164,7 @@ public class Maiziedu {
 			out = new FileOutputStream(file);
 			InputStream inputStream = openConnection.getInputStream();
 
-			final byte[] bs = new byte[1024 * 512];
+			final byte[] bs = new byte[1024 * 1024 * 2];
 			int len = 0;
 			int count = 0;
 			while (-1 != (len = inputStream.read(bs))) {
