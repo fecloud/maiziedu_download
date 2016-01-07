@@ -40,18 +40,24 @@ public class Maiziedu {
 	public static void main(String[] args) throws IOException, ParserException {
 
 		if (args == null || args.length < 2) {
-			System.err.println("Uage: htmlfile savepath");
+			System.err.println("Uage: courseurl savepath");
 		} else {
-			for (EduBean str : parseHtml(args[0])) {
-				final String videoUrl = getVideo("http://www.maiziedu.com"
-						+ str.getUrl());
-				if (null != videoUrl) {
-					while(true){
-						try{
-							downloadVideo(videoUrl, args[1], str.getName() + ".mp4");
-							break;
-						}catch (Exception e) {
-							System.out.println(String.format("[ downloadVideo %s error", videoUrl));
+			for (CourseBean c : parseCourseHtml(args[0])) {
+				String path = args[1] + File.separator + c.getName();
+				new File(path).mkdirs();
+				for (EduBean str : parseHtml(c.getUrl())) {
+					final String videoUrl = getVideo("http://www.maiziedu.com"
+							+ str.getUrl());
+					if (null != videoUrl) {
+						while (true) {
+							try {
+								downloadVideo(videoUrl, path, str.getName()
+										+ ".mp4");
+								break;
+							} catch (Exception e) {
+								System.out.println(String.format(
+										"[ downloadVideo %s error", videoUrl));
+							}
 						}
 					}
 				}
@@ -60,10 +66,46 @@ public class Maiziedu {
 
 	}
 
+	public static List<CourseBean> parseCourseHtml(String htmlfile)
+			throws IOException, ParserException {
+		System.out
+				.println(String.format("[ parseHtml htmlfile:%s ]", htmlfile));
+		String courese_regx = new URL(htmlfile).getPath();
+		courese_regx += "/[\\w|-]*";
+		Parser parser = new Parser(new URL(htmlfile).openConnection());
+		parser.setEncoding("UTF-8");
+		TagNameFilter filter = new TagNameFilter("a");
+		NodeList list = parser.parse(filter);
+
+		String href = null;
+		List<CourseBean> beans = new ArrayList<CourseBean>();
+		CourseBean bean = null;
+		for (int i = 0; i < list.size(); i++) {
+			LinkTag tag = (LinkTag) list.elementAt(i);
+			href = tag.getAttribute("href");
+			// System.out.println(href);
+			if (href != null && href.matches(courese_regx)) {
+				System.out.print("[ " + tag.getAttribute("href") + "    ");
+				System.out.println(tag.getAttribute("title") + " ]");
+				bean = new CourseBean();
+				bean.setUrl("http://www.maiziedu.com" + href);
+				bean.setName(tag.getAttribute("title").trim());
+				beans.add(bean);
+			}
+		}
+		System.out.println(String.format("[ find download file :%s ]",
+				beans.size()));
+		return beans;
+	}
+
 	public static List<EduBean> parseHtml(String htmlfile) throws IOException,
 			ParserException {
-		System.out.println(String.format("[ parseHtml htmlfile:%s ]", htmlfile));
-		Parser parser = new Parser(htmlfile);
+		System.out
+				.println(String.format("[ parseHtml htmlfile:%s ]", htmlfile));
+		String courese_regx = new URL(htmlfile).getPath();
+		courese_regx = courese_regx.substring(0, courese_regx.lastIndexOf("/"));
+		courese_regx += "/[\\w|-]*/";
+		Parser parser = new Parser(new URL(htmlfile).openConnection());
 		parser.setEncoding("UTF-8");
 		TagNameFilter filter = new TagNameFilter("a");
 		NodeList list = parser.parse(filter);
@@ -74,7 +116,8 @@ public class Maiziedu {
 		for (int i = 0; i < list.size(); i++) {
 			LinkTag tag = (LinkTag) list.elementAt(i);
 			href = tag.getAttribute("href");
-			if (href != null && href.matches("/lesson/\\w*/")) {
+			// System.out.println(href);
+			if (href != null && href.matches(courese_regx)) {
 				System.out.print("[ " + tag.getAttribute("href") + "    ");
 				System.out.println(tag.toPlainTextString().replaceAll("&nbsp;",
 						"")
@@ -85,7 +128,8 @@ public class Maiziedu {
 				beans.add(bean);
 			}
 		}
-		System.out.println(String.format("[ find download file :%s ]", beans.size()));
+		System.out.println(String.format("[ find download file :%s ]",
+				beans.size()));
 		return beans;
 	}
 
@@ -111,7 +155,8 @@ public class Maiziedu {
 
 	public static String getVideo(String address) throws IOException {
 		final String str = getHtml(address);
-		Pattern pattern = Pattern.compile("http://(\\w|\\.)*.maiziedu.com/(\\w|\\.)*.mp4");
+		Pattern pattern = Pattern
+				.compile("http://(\\w|\\.)*.maiziedu.com/(\\w|\\.)*.mp4");
 		Matcher matcher = pattern.matcher(str);
 		if (matcher.find())
 			return matcher.group();
@@ -170,14 +215,15 @@ public class Maiziedu {
 			while (-1 != (len = inputStream.read(bs))) {
 				out.write(bs, 0, len);
 				count += len;
-				System.out.println(String.format("[ downloadVideo length: %s/%s ]",
-						count,contentlength));
+				System.out.println(String
+						.format("[ downloadVideo length: %s/%s ]", count,
+								contentlength));
 			}
 			out.flush();
 			out.close();
 			inputStream.close();
 		}
-		
+
 		System.out.println(String.format("[ downloadVideo finish ]"));
 
 		openConnection.disconnect();
