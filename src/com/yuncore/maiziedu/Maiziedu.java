@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -216,8 +217,8 @@ public class Maiziedu {
 				out.write(bs, 0, len);
 				count += len;
 				System.out.println(String
-						.format("[ downloadVideo length: %s/%s ]", count,
-								contentlength));
+						.format("[ downloadVideo length: %s/%s ]", bytes2kb(count),
+								bytes2kb(contentlength)));
 			}
 			out.flush();
 			out.close();
@@ -229,6 +230,25 @@ public class Maiziedu {
 		openConnection.disconnect();
 		return true;
 
+	}
+	
+	/**
+	 * byte(字节)根据长度转成kb(千字节)和mb(兆字节)
+	 * 
+	 * @param bytes
+	 * @return
+	 */
+	public static String bytes2kb(long bytes) {
+		BigDecimal filesize = new BigDecimal(bytes);
+		BigDecimal megabyte = new BigDecimal(1024 * 1024);
+		float returnValue = filesize.divide(megabyte, 2, BigDecimal.ROUND_UP)
+				.floatValue();
+		if (returnValue > 1)
+			return (returnValue + "MB");
+		BigDecimal kilobyte = new BigDecimal(1024);
+		returnValue = filesize.divide(kilobyte, 2, BigDecimal.ROUND_UP)
+				.floatValue();
+		return (returnValue + "KB");
 	}
 
 }
