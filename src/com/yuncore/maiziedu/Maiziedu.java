@@ -182,7 +182,7 @@ public class Maiziedu {
 		openConnection.setConnectTimeout(10000);
 		openConnection.setReadTimeout(10000);
 		openConnection.setDoInput(true);
-		openConnection.setDoOutput(true);
+		openConnection.setDoOutput(false);
 
 		InputStream inputStream = openConnection.getInputStream();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -211,9 +211,12 @@ public class Maiziedu {
 		openConnection.setConnectTimeout(10000);
 		openConnection.setReadTimeout(10000);
 		openConnection.setDoInput(true);
-		openConnection.setDoOutput(true);
+		openConnection.setDoOutput(false);
 
 		int contentlength = openConnection.getContentLength();
+		if(contentlength <=0){
+			throw new IOException("contentlength " + contentlength);
+		}
 		System.out.println(String.format("[ downloadVideo contentlength:%s ]",
 				bytes2kb(contentlength)));
 		FileOutputStream out = null;
