@@ -60,6 +60,9 @@ public class Maiziedu {
 										"[ downloadVideo %s error", videoUrl));
 							}
 						}
+					} else {
+						System.err.println("not found video file");
+						System.exit(0);
 					}
 				}
 			}
@@ -157,7 +160,7 @@ public class Maiziedu {
 	public static String getVideo(String address) throws IOException {
 		final String str = getHtml(address);
 		Pattern pattern = Pattern
-				.compile("http://(\\w|\\.)*.maiziedu.com/(\\w|\\.|%)*.mp4");
+				.compile("http://(\\w|\\.)*.maiziedu.com/(\\w|\\.|%|\\-)*.mp4");
 		Matcher matcher = pattern.matcher(str);
 		if (matcher.find())
 			return matcher.group();
@@ -210,16 +213,29 @@ public class Maiziedu {
 			out = new FileOutputStream(file);
 			InputStream inputStream = openConnection.getInputStream();
 
-			final byte[] bs = new byte[1024 * 1024 * 2];
+			final byte[] bs = new byte[1024 * 1024];
 			int len = 0;
 			int count = 0;
+			int mscount = 0;
+			long msstart = System.currentTimeMillis();
 			while (-1 != (len = inputStream.read(bs))) {
 				out.write(bs, 0, len);
 				count += len;
-				System.out.println(String
-						.format("[ downloadVideo length: %s/%s ]", bytes2kb(count),
-								bytes2kb(contentlength)));
+				mscount += len;
+				if (System.currentTimeMillis() - msstart >= 1000) {
+					System.out.println(String.format(
+							"[ downloadVideo length: %s/%s speed:%s]",
+							bytes2kb(count), bytes2kb(contentlength),
+							bytes2kb(mscount)));
+					mscount = 0;
+					msstart = System.currentTimeMillis();
+				}
+
 			}
+
+			System.out.println(String.format(
+					"[ downloadVideo length: %s/%s speed:%s]", bytes2kb(count),
+					bytes2kb(contentlength), bytes2kb(mscount)));
 			out.flush();
 			out.close();
 			inputStream.close();
@@ -231,7 +247,7 @@ public class Maiziedu {
 		return true;
 
 	}
-	
+
 	/**
 	 * byte(字节)根据长度转成kb(千字节)和mb(兆字节)
 	 * 
