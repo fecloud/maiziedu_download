@@ -76,7 +76,10 @@ public class Maiziedu {
 				.println(String.format("[ parseHtml htmlfile:%s ]", htmlfile));
 		String courese_regx = new URL(htmlfile).getPath();
 		courese_regx += "/[\\w|-]*";
-		Parser parser = new Parser(new URL(htmlfile).openConnection());
+		final HttpURLConnection openConnection = (HttpURLConnection) new URL(htmlfile).openConnection();
+		openConnection.setConnectTimeout(10000);
+		openConnection.setReadTimeout(10000);
+		Parser parser = new Parser(openConnection);
 		parser.setEncoding("UTF-8");
 		TagNameFilter filter = new TagNameFilter("a");
 		NodeList list = parser.parse(filter);
@@ -109,7 +112,10 @@ public class Maiziedu {
 		String courese_regx = new URL(htmlfile).getPath();
 		courese_regx = courese_regx.substring(0, courese_regx.lastIndexOf("/"));
 		courese_regx += "/[\\w|-]*/";
-		Parser parser = new Parser(new URL(htmlfile).openConnection());
+		final HttpURLConnection openConnection = (HttpURLConnection) new URL(htmlfile).openConnection();
+		openConnection.setConnectTimeout(10000);
+		openConnection.setReadTimeout(10000);
+		Parser parser = new Parser(openConnection);
 		parser.setEncoding("UTF-8");
 		TagNameFilter filter = new TagNameFilter("a");
 		NodeList list = parser.parse(filter);
@@ -173,6 +179,8 @@ public class Maiziedu {
 		final HttpURLConnection openConnection = (HttpURLConnection) url
 				.openConnection();
 
+		openConnection.setConnectTimeout(10000);
+		openConnection.setReadTimeout(10000);
 		openConnection.setDoInput(true);
 		openConnection.setDoOutput(true);
 
@@ -200,12 +208,14 @@ public class Maiziedu {
 		final HttpURLConnection openConnection = (HttpURLConnection) address
 				.openConnection();
 
+		openConnection.setConnectTimeout(10000);
+		openConnection.setReadTimeout(10000);
 		openConnection.setDoInput(true);
 		openConnection.setDoOutput(true);
 
 		int contentlength = openConnection.getContentLength();
 		System.out.println(String.format("[ downloadVideo contentlength:%s ]",
-				contentlength));
+				bytes2kb(contentlength)));
 		FileOutputStream out = null;
 		final File file = new File(prefix + "/" + filename);
 		if (!file.exists() || file.length() != contentlength) {
