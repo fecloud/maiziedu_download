@@ -272,7 +272,7 @@ public class Maiziedu {
 				mscount += len;
 				if (System.currentTimeMillis() - msstart >= 1000) {
 					System.out.println(String.format(
-							"[ downloadVideo length: %s/%s speed:%s]",
+							"[ downloadVideo length: %s/%s speed:%s ]",
 							bytes2kb(count), bytes2kb(contentlength),
 							bytes2kb(mscount)));
 					mscount = 0;
@@ -282,7 +282,7 @@ public class Maiziedu {
 			}
 
 			System.out.println(String.format(
-					"[ downloadVideo length: %s/%s speed:%s]", bytes2kb(count),
+					"[ downloadVideo length: %s/%s speed:%s ]", bytes2kb(count),
 					bytes2kb(contentlength), bytes2kb(mscount)));
 			out.flush();
 			out.close();
