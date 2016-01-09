@@ -38,31 +38,66 @@ public class Maiziedu {
 	 * @throws IOException
 	 * @throws ParserException
 	 */
-	public static void main(String[] args) throws IOException, ParserException {
+	public static void main(String[] args) {
 
 		if (args == null || args.length < 2) {
 			System.err.println("Uage: courseurl savepath");
 		} else {
-			for (CourseBean c : parseCourseHtml(args[0])) {
+			
+			List<CourseBean> courseBeans = null;
+			
+			while (true) {
+				try {
+					courseBeans = parseCourseHtml(args[0]);
+					break;
+				} catch (Exception e1) {
+					System.err.println("parseCourseHtml error");
+				}
+			}
+			
+			if(null == courseBeans || courseBeans.isEmpty()){
+				return ;
+			}
+			
+			for (CourseBean c :courseBeans) {
 				String path = args[1] + File.separator + c.getName();
 				new File(path).mkdirs();
-				for (EduBean str : parseHtml(c.getUrl())) {
-					final String videoUrl = getVideo("http://www.maiziedu.com"
-							+ str.getUrl());
-					if (null != videoUrl) {
-						while (true) {
-							try {
+				
+				 List<EduBean> eduBeans = null;
+				while (true) {
+					try {
+						eduBeans = parseHtml(c.getUrl());
+						break;
+					} catch (Exception e1) {
+						System.err.println("parseHtml error");
+					}
+				}
+				
+				if(null == eduBeans || eduBeans.isEmpty()){
+					continue ;
+				}
+				
+				for (EduBean str : eduBeans) {
+
+					while (true) {
+
+						try {
+							final String videoUrl = getVideo("http://www.maiziedu.com"
+									+ str.getUrl());
+							if (null != videoUrl) {
+
 								downloadVideo(videoUrl, path, str.getName()
 										+ ".mp4");
 								break;
-							} catch (Exception e) {
-								System.out.println(String.format(
-										"[ downloadVideo %s error", videoUrl));
+
+							} else {
+								System.err.println("not found video file");
+								System.exit(0);
 							}
+						} catch (Exception e) {
+							System.out.println(String
+									.format("[ downloadVideo error"));
 						}
-					} else {
-						System.err.println("not found video file");
-						System.exit(0);
 					}
 				}
 			}
