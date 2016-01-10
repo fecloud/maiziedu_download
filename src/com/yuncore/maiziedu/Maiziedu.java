@@ -205,6 +205,12 @@ public class Maiziedu {
 		Matcher matcher = pattern.matcher(str);
 		if (matcher.find())
 			return matcher.group();
+		
+		Pattern pattern2 = Pattern
+				.compile("http://(\\w|\\.)*.(\\w)+.com/(\\w|\\.|%|\\-|\\(|\\))*.mp4");
+		Matcher matcher2 = pattern2.matcher(str);
+		if (matcher2.find())
+			return matcher2.group();
 		return null;
 	}
 
