@@ -200,15 +200,15 @@ public class Maiziedu {
 
 	public static String getVideo(String address) throws IOException {
 		final String str = getHtml(address);
-		Pattern pattern = Pattern
+		final Pattern pattern = Pattern
 				.compile("http://(\\w|\\.)*.maiziedu.com/(\\w|\\.|%|\\-|\\(|\\))*.mp4");
-		Matcher matcher = pattern.matcher(str);
+		final Matcher matcher = pattern.matcher(str);
 		if (matcher.find())
 			return matcher.group();
 		
-		Pattern pattern2 = Pattern
-				.compile("http://(\\w|\\.)*.(\\w)+.com/(\\w|\\.|%|\\-|\\(|\\))*.mp4");
-		Matcher matcher2 = pattern2.matcher(str);
+		final Pattern pattern2 = Pattern
+				.compile("http://(\\w|\\.)*.microoh.com/(\\w|\\.|%|\\-|\\(|\\))*.mp4");
+		final Matcher matcher2 = pattern2.matcher(str);
 		if (matcher2.find())
 			return matcher2.group();
 		return null;
