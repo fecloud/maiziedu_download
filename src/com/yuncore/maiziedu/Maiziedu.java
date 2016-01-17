@@ -200,17 +200,29 @@ public class Maiziedu {
 
 	public static String getVideo(String address) throws IOException {
 		final String str = getHtml(address);
-		final Pattern pattern = Pattern
+		Pattern pattern = Pattern
 				.compile("http://(\\w|\\.)*.maiziedu.com/(\\w|\\.|%|\\-|\\(|\\))*.mp4");
-		final Matcher matcher = pattern.matcher(str);
+		Matcher matcher = pattern.matcher(str);
 		if (matcher.find())
 			return matcher.group();
 		
-		final Pattern pattern2 = Pattern
+		pattern = Pattern
 				.compile("http://(\\w|\\.)*.(\\w)+.com/(\\w|\\.|%|\\-|\\(|\\)|\\+)*.mp4");
-		final Matcher matcher2 = pattern2.matcher(str);
-		if (matcher2.find())
-			return matcher2.group();
+		matcher = pattern.matcher(str);
+		if (matcher.find())
+			return matcher.group();
+		
+		pattern = Pattern
+				.compile("http://(\\w|\\.)*.maiziedu.com/(\\w|\\.|%|\\-|\\(|\\))*.m4v");
+		matcher = pattern.matcher(str);
+		if (matcher.find())
+			return matcher.group();
+		
+		pattern = Pattern
+				.compile("http://(\\w|\\.)*.(\\w)+.com/(\\w|\\.|%|\\-|\\(|\\)|\\+)*.m4v");
+		matcher = pattern.matcher(str);
+		if (matcher.find())
+			return matcher.group();
 		return null;
 	}
 
