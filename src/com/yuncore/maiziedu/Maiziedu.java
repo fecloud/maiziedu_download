@@ -201,25 +201,25 @@ public class Maiziedu {
 	public static String getVideo(String address) throws IOException {
 		final String str = getHtml(address);
 		Pattern pattern = Pattern
-				.compile("http://(\\w|\\.)*.maiziedu.com/(\\w|\\.|%|\\-|\\(|\\)|/|\\s)*.mp4");
+				.compile("http://(\\w|\\.)*.maiziedu.com/(\\w|\\.|%|\\-|\\(|\\)|/|\\s|、)*.mp4");
 		Matcher matcher = pattern.matcher(str);
 		if (matcher.find())
 			return matcher.group();
 		
 		pattern = Pattern
-				.compile("http://(\\w|\\.)*.(\\w)+.com/(\\w|\\.|%|\\-|\\(|\\)|\\+|/|\\s)*.mp4");
+				.compile("http://(\\w|\\.)*.(\\w)+.com/(\\w|\\.|%|\\-|\\(|\\)|\\+|/|\\s|、)*.mp4");
 		matcher = pattern.matcher(str);
 		if (matcher.find())
 			return matcher.group();
 		
 		pattern = Pattern
-				.compile("http://(\\w|\\.)*.maiziedu.com/(\\w|\\.|%|\\-|\\(|\\)|/|\\s)*.m4v");
+				.compile("http://(\\w|\\.)*.maiziedu.com/(\\w|\\.|%|\\-|\\(|\\)|/|\\s|、)*.m4v");
 		matcher = pattern.matcher(str);
 		if (matcher.find())
 			return matcher.group();
 		
 		pattern = Pattern
-				.compile("http://(\\w|\\.)*.(\\w)+.com/(\\w|\\.|%|\\-|\\(|\\)|\\+|/|\\s)*.m4v");
+				.compile("http://(\\w|\\.)*.(\\w)+.com/(\\w|\\.|%|\\-|\\(|\\)|\\+|/|\\s|、)*.m4v");
 		matcher = pattern.matcher(str);
 		if (matcher.find())
 			return matcher.group();
